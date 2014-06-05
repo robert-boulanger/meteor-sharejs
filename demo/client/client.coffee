@@ -17,12 +17,13 @@ Template.docItem.events =
     e.preventDefault()
     Session.set("document", @_id)
 
-Template.docTitle.title = ->
+Template.docTitle.title = -> 
   # Strange bug https://github.com/meteor/meteor/issues/1447
   Documents.findOne(@+"")?.title
 
 Template.editor.docid = ->
   Session.get("document")
+
 
 Template.editor.events =
   "keydown input": (e) ->
@@ -46,3 +47,14 @@ Template.editor.config = ->
     ace.setTheme('ace/theme/monokai')
     ace.setShowPrintMargin(false)
     ace.getSession().setUseWrapMode(true)
+    ace.getSession().setMode("ace/mode/markdown")
+
+Template.editor.configcm = ->
+  (cm) ->
+    # Set some reasonable options on the editor
+    #ace.setTheme('ace/theme/monokai')
+    #ace.setShowPrintMargin(false)
+    #ace.getSession().setUseWrapMode(true)
+    #ace.getSession().setMode("ace/mode/markdown")
+
+

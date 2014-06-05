@@ -3,7 +3,7 @@
 </head>
 
 <body>
-    {{> forkme}}
+
     {{> main}}
 </body>
 
@@ -52,7 +52,7 @@
 <template name="editor">
     {{#with docid}}
         {{> docTitle this}}
-        {{> sharejsAce docid=this callback=config id="editor"}}
+        {{> sharejsCM docid=this callback=configcm id="editor"}}
     {{/with}}
 </template>
 
