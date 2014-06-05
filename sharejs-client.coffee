@@ -3,6 +3,13 @@ require('ace/config').set('basePath', '/packages/sharejs/ace-builds/src')
 
 # Hack the shit out of the Blaze Component API
 # until https://github.com/meteor/meteor/issues/2010 is resolved
+UI.registerHelper "sharejsCM", ->
+  UI.Component.extend
+    kind: "ShareJSCM",
+    render: -> Template._sharejsCM
+
+
+
 UI.registerHelper "sharejsAce", ->
   UI.Component.extend
     kind: "ShareJSAce",
@@ -29,6 +36,10 @@ cleanup = ->
   if @_editor?
     @_doc?.detach_ace?()
     @_editor = null
+  # Detach CodeMirror editor, if any
+  if @_cmeditor?
+    @_doc?.detach_cm?()
+    @_cmeditor = null
   # Close connection to the node server
   if @_doc?
     @_doc.close()
@@ -70,3 +81,23 @@ Template._sharejsAce.rendered = ->
   @data.callback?(@_editor)
 
 Template._sharejsAce.destroyed = cleanup
+
+Template._sharejsCM.rendered = ->
+  @_cmeditor = CodeMirror(document.getElementById(@data.id || "sharejsCmEditor"))
+  @_cmeditor.options.readOnly=true # Disable editing until share is connected
+
+  sharejs.open @data.docid, 'text', getOptions(), (error, doc) =>
+    if error
+      console.log error
+    else
+      # Don't attach duplicate editors if re-render happens too fast
+      return unless @_cmeditor? and doc.name is @data.docid
+
+      doc.attach_cm(@_cmeditor)
+      @_cmeditor.options.readOnly=false
+      @_doc = doc
+
+  # Configure the editor as requested
+  @data.callback?(@_cmeditor)
+
+Template._sharejsCM.destroyed = cleanup

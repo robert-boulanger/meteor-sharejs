@@ -26,6 +26,12 @@ Use this helper to get an Ace editor. Make sure you specify a size (via CSS) on 
 {{> sharejsAce docid=docid id="editor"}}
 ```
 
+Use this helper to get an CodeMirror editor. Make sure you specify a size (via CSS) on the #editor div or you won't see anything.
+```
+{{> sharejsCM docid=docid id="editor"}}
+```
+
+
 The templates will clean themselves up when re-rendered (i.e., you have several documents and docid changes.)
 
 ## Client Configuration

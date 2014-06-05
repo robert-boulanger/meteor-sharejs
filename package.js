@@ -66,6 +66,12 @@ Package.on_use(function (api) {
       '.npm/package/node_modules/share/webclient/share.js'
   ], 'client');
 
+  // CodeMirror for the client
+  var cmJS = 'codemirror/lib/codemirror.js';
+  api.add_files(cmJS, 'client', { bare: true });
+
+
+
   // Ace editor for the client
   var aceJS = 'ace-builds/src/ace.js';
   api.add_files(aceJS, 'client', { bare: true });
@@ -77,6 +83,7 @@ Package.on_use(function (api) {
   // Add the ShareJS connectors
   // TODO: a really smart package would not push both of these to the client depending on use case
   api.add_files('.npm/package/node_modules/share/webclient/ace.js', 'client');
+  api.add_files('.npm/package/node_modules/share/webclient/cm.js', 'client');
   api.add_files('.npm/package/node_modules/share/webclient/textarea.js', 'client');
 
   // Our files
@@ -93,16 +100,4 @@ Package.on_use(function (api) {
 
   // Export the ShareJS interface
   api.export('ShareJS', 'server');
-});
-
-Package.on_test(function (api) {
-  api.use([
-    'coffeescript',
-    'tinytest',
-    'test-helpers'
-  ]);
-
-  api.use("sharejs");
-
-  api.add_files('tests/server_tests.coffee', 'server');
 });
